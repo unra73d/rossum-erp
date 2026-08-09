@@ -51,6 +51,10 @@ func New(st *store.Store, ui fs.FS, log *slog.Logger) http.Handler {
 	mux.HandleFunc("GET /api/events", s.listEvents)
 	mux.HandleFunc("DELETE /api/events", s.clearEvents)
 
+	// Rossum webhook target - see rossum_hook.go for why this is a webhook
+	// and not a serverless function calling GET /api/vendors/match.
+	mux.HandleFunc("POST /rossum/vendor-match", s.vendorMatchHook)
+
 	if ui != nil {
 		mux.Handle("/", s.spa())
 	}

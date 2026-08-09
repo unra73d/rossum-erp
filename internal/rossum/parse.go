@@ -37,8 +37,11 @@ type Payload struct {
 	Results []json.RawMessage `json:"results"`
 }
 
-// Node is one element of the annotation content tree.
+// Node is one element of the annotation content tree. ID is the datapoint's
+// database id - distinct from SchemaID - and is what a hook response must
+// target when writing an operation back to this field.
 type Node struct {
+	ID       json.Number     `json:"id"`
 	SchemaID string          `json:"schema_id"`
 	Category string          `json:"category"`
 	Value    json.RawMessage `json:"value"`
@@ -196,6 +199,31 @@ func lineItem(n Node) (model.LineItem, bool) {
 	// inventing an amount. Silent repair in the ERP is how a broken queue stays
 	// broken for a month.
 	return item, found
+}
+
+// FindNode returns the first node with this schema_id, searching depth-first
+// through sections and multivalue/tuple children. Unlike Parse, which builds
+// a whole invoice, this is for hooks that need a single datapoint's id and
+// value - such as one reading sender_vat_id to look up a vendor.
+func FindNode(nodes []Node, schemaID string) *Node {
+	for i := range nodes {
+		if nodes[i].SchemaID == schemaID {
+			return &nodes[i]
+		}
+		if found := FindNode(nodes[i].Children, schemaID); found != nil {
+			return found
+		}
+	}
+	return nil
+}
+
+// Value returns a node's usable string value, or "" for a nil node - the
+// exported counterpart to value(), for callers outside this package.
+func Value(n *Node) string {
+	if n == nil {
+		return ""
+	}
+	return value(*n)
 }
 
 // value pulls the usable string out of a datapoint, preferring the normalized

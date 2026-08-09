@@ -53,11 +53,12 @@ curl 'localhost:8080/api/vendors/match?vat=CZ-34560613&name=Vendor%20a.s.'
 | --- | --- | --- |
 | `GET` | `/api/vendors?q=` | Vendor list, searchable by code, name, VAT, city |
 | `POST` `PUT` `DELETE` | `/api/vendors[/{code}]` | Vendor master data maintenance |
-| `GET` | `/api/vendors/match` | Vendor matching — `vat`, `name`, `iban`, `account`, `tax_number` |
+| `GET` | `/api/vendors/match` | Vendor lookup (pull) — `vat`, `name`, `iban`, `account`, `tax_number` |
+| `POST` | `/rossum/vendor-match` | Vendor lookup as a Rossum webhook (push) — see below |
 | `GET` | `/api/invoices` | Posted documents |
-| `POST` | `/api/invoices` | **The webhook target.** Flat or Rossum payload |
+| `POST` | `/api/invoices` | **The invoice webhook target.** Flat or Rossum payload |
 | `PUT` `DELETE` | `/api/invoices/{id}` | Correct or remove a posted document |
-| `GET` `DELETE` | `/api/events` | Inbound call log |
+| `GET` `DELETE` | `/api/events` | Inbound call log — includes both vendor-match endpoints |
 | `GET` | `/api/health` | Health check |
 
 `POST /api/invoices` answers `201` (posted), `409` (this vendor and invoice number are
@@ -90,14 +91,34 @@ the VAT number resolves to vendor 9999, the printed company name does not match 
 ERPX reports exactly that. Whether a partial agreement is good enough to book is Rossum's
 call, not the ERP's. Several matches means the master data itself is ambiguous.
 
+### Two ways to wire vendor matching into Rossum
+
+Both hit the same `MatchVendor` logic; they differ in who initiates the call, which
+matters because of a Rossum platform restriction:
+
+- **`GET /api/vendors/match`** — for a **serverless function**. Rossum's serverless
+  functions have no internet access by default, except to the Rossum API itself; calling
+  this endpoint from one requires Rossum granting an explicit exception for the account.
+- **`POST /rossum/vendor-match`** — for a **webhook extension**. A webhook is Rossum's own
+  infrastructure making an outbound call to a URL you host, the same category of thing as
+  notifying Slack — not sandboxed user code, so it isn't subject to that restriction. Point
+  a webhook extension at this path, triggered on `annotation_content`, and it speaks
+  Rossum's own hook contract directly: it reads `sender_vat_id`/`sender_name` out of the
+  posted annotation tree and returns `operations`/`messages` in the shape Rossum expects,
+  writing `vendor_code` (or a blocking error) with no function code needed on the Rossum
+  side at all - see `internal/api/rossum_hook.go`.
+
+Prefer the webhook route unless Rossum has already granted internet access for the queue.
+
 ## What Rossum has to be configured to send
 
 Everything below is configured in Rossum; this repository does not contain any of it.
 
-- **Two schema fields.** `vendor_code` on the header and `item_amount_total_base` inside
-  the `line_item` tuple, both `can_export: true`. ERPX rejects documents without them.
-- **A vendor code that resolves.** Whatever writes `vendor_code` can call
-  `GET /api/vendors/match` to turn extracted supplier details into a code.
+- **Two schema fields.** `vendor_code` on the header and `item_total_base` inside the
+  `line_item` tuple, both `can_export: true`. ERPX rejects documents without them.
+- **A vendor code that resolves.** Either wire a webhook extension at
+  `POST /rossum/vendor-match` (recommended - see above), or a serverless function calling
+  `GET /api/vendors/match` if internet access has been granted for the queue.
 - **An export webhook** pointing at `POST /api/invoices`. No payload transformation is
   needed: the annotation content tree is flattened here, in `internal/rossum/parse.go`.
 
