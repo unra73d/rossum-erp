@@ -107,6 +107,25 @@ func TestMatchEndpoint(t *testing.T) {
 	if len(matches) != 0 {
 		t.Errorf("got %d matches, want 0", len(matches))
 	}
+
+	// Both calls above must be visible in the event log - a hook that never
+	// writes vendor_code needs to be debuggable from here, not guessed at.
+	_, events := do(t, h, "GET", "/api/events", "")
+	results := events["results"].([]any)
+	if len(results) != 2 {
+		t.Fatalf("logged %d events, want 2", len(results))
+	}
+	miss := results[0].(map[string]any) // newest first
+	if miss["format"] != "vendor_match" || miss["status"].(float64) != 200 {
+		t.Errorf("miss event = %v", miss)
+	}
+	if errs := miss["errors"].([]any); len(errs) != 1 || errs[0] != "no_match" {
+		t.Errorf("miss event errors = %v, want [no_match]", errs)
+	}
+	hit := results[1].(map[string]any)
+	if _, hasErrors := hit["errors"]; hasErrors {
+		t.Errorf("clean match should have no errors tag: %v", hit)
+	}
 }
 
 func TestPostInvoiceFlat(t *testing.T) {

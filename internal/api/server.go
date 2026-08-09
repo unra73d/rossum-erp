@@ -175,7 +175,9 @@ func (s *Server) deleteVendor(w http.ResponseWriter, r *http.Request) {
 
 // matchVendor is the endpoint the Rossum vendor-matching function calls. It
 // never 404s on a miss: a miss is a normal, expected answer that the caller
-// turns into a blocking message on the annotation.
+// turns into a blocking message on the annotation. Every call is logged -
+// including lookups, not just postings - so a hook that never populates
+// vendor_code is debuggable from the Webhook log tab instead of a guess.
 func (s *Server) matchVendor(w http.ResponseWriter, r *http.Request) {
 	q := r.URL.Query()
 	result := MatchVendor(s.store.Vendors(), MatchQuery{
@@ -185,6 +187,31 @@ func (s *Server) matchVendor(w http.ResponseWriter, r *http.Request) {
 		Account: q.Get("account"),
 		TaxNum:  q.Get("tax_number"),
 	})
+
+	var errs []string
+	switch len(result.Matches) {
+	case 0:
+		errs = []string{"no_match"}
+	case 1:
+		// clean match, no tag
+	default:
+		errs = []string{"ambiguous_match"}
+	}
+	// RawRequest holds the query and the resolved matches together - both the
+	// question and the answer are useful when debugging a hook from this tab.
+	raw, err := json.Marshal(result)
+	if err != nil {
+		s.log.Error("marshal match result for event log", "error", err)
+	}
+	s.store.LogEvent(model.Event{
+		Method:     r.Method,
+		Path:       r.URL.Path,
+		Format:     "vendor_match",
+		Status:     http.StatusOK,
+		Errors:     errs,
+		RawRequest: string(raw),
+	})
+
 	writeJSON(w, http.StatusOK, result)
 }
 
