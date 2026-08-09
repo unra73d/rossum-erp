@@ -22,7 +22,7 @@
         "category": "section",
         "children": [
           { "schema_id": "sender_name", "category": "datapoint", "content": { "value": "Supplier s.r.o." } },
-          { "schema_id": "sender_vat_id", "category": "datapoint", "content": { "value": "CZ34560613" } },
+          { "schema_id": "sender_vat_id_sanitized", "category": "datapoint", "content": { "value": "CZ34560613" } },
           { "schema_id": "sender_address", "category": "datapoint", "content": { "value": "123 Avenue, 120 00 Prague 2, Czech Republic" } },
           { "schema_id": "account_num", "category": "datapoint", "content": { "value": "43-3242342345/0100" } },
           { "schema_id": "bic", "category": "datapoint", "content": { "value": "KOMBCZPPXXX" } },

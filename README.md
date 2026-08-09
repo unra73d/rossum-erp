@@ -103,7 +103,7 @@ matters because of a Rossum platform restriction:
   infrastructure making an outbound call to a URL you host, the same category of thing as
   notifying Slack — not sandboxed user code, so it isn't subject to that restriction. Point
   a webhook extension at this path, triggered on `annotation_content`, and it speaks
-  Rossum's own hook contract directly: it reads `sender_vat_id`/`sender_name` out of the
+  Rossum's own hook contract directly: it reads `sender_vat_id_sanitized`/`sender_name` out of the
   posted annotation tree and returns `operations`/`messages` in the shape Rossum expects,
   writing `vendor_code` (or a blocking error) with no function code needed on the Rossum
   side at all - see `internal/api/rossum_hook.go`.

@@ -92,7 +92,7 @@ func (s *Server) vendorMatchHook(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	vatNode := rossum.FindNode(content, "sender_vat_id")
+	vatNode := rossum.FindNode(content, "sender_vat_id_sanitized")
 	nameNode := rossum.FindNode(content, "sender_name")
 	vat := strings.TrimSpace(rossum.Value(vatNode))
 	name := strings.TrimSpace(rossum.Value(nameNode))

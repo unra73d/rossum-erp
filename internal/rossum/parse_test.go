@@ -21,7 +21,7 @@ const webhookBody = `{
       ]},
       {"schema_id": "vendor_section", "category": "section", "children": [
         {"schema_id": "sender_name", "category": "datapoint", "content": {"value": "Supplier s.r.o."}},
-        {"schema_id": "sender_vat_id", "category": "datapoint", "content": {"value": "CZ34560613"}},
+        {"schema_id": "sender_vat_id_sanitized", "category": "datapoint", "content": {"value": "CZ34560613"}},
         {"schema_id": "account_num", "category": "datapoint", "content": {"value": "43-3242342345/0100"}}
       ]},
       {"schema_id": "amounts_section", "category": "section", "children": [
@@ -124,7 +124,7 @@ const realSchemaFieldNames = `{
     ]},
     {"schema_id": "vendor_section", "category": "section", "children": [
       {"schema_id": "sender_name", "category": "datapoint", "content": {"value": "Supplier s.r.o."}},
-      {"schema_id": "sender_vat_id", "category": "datapoint", "content": {"value": "CZ34560613"}},
+      {"schema_id": "sender_vat_id_sanitized", "category": "datapoint", "content": {"value": "CZ34560613"}},
       {"schema_id": "vendor_code", "category": "datapoint", "content": {"value": "9999"}}
     ]},
     {"schema_id": "line_items_section", "category": "section", "children": [

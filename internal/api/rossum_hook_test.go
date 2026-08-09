@@ -8,15 +8,16 @@ import (
 )
 
 // hookPayload builds a minimal annotation_content body: a vendor_code
-// datapoint plus optional sender_vat_id/sender_name, each with a distinct
-// numeric id so operations/messages can be asserted against a specific field.
+// datapoint plus optional sender_vat_id_sanitized/sender_name, each with a
+// distinct numeric id so operations/messages can be asserted against a
+// specific field.
 func hookPayload(vat, name string, includeVendorCode bool) string {
 	var fields []string
 	if includeVendorCode {
 		fields = append(fields, `{"id":100,"schema_id":"vendor_code","category":"datapoint","content":{"value":""}}`)
 	}
 	if vat != "" {
-		fields = append(fields, fmt.Sprintf(`{"id":101,"schema_id":"sender_vat_id","category":"datapoint","content":{"value":%q}}`, vat))
+		fields = append(fields, fmt.Sprintf(`{"id":101,"schema_id":"sender_vat_id_sanitized","category":"datapoint","content":{"value":%q}}`, vat))
 	}
 	if name != "" {
 		fields = append(fields, fmt.Sprintf(`{"id":102,"schema_id":"sender_name","category":"datapoint","content":{"value":%q}}`, name))
