@@ -1,17 +1,27 @@
-# Render blueprint: one Docker web service, no database, no auth.
+# Render blueprint: one native Go web service, no database, no auth.
 #
-# On the free plan the container filesystem is ephemeral and the instance
-# sleeps when idle, so posted invoices are lost on restart while the vendor
-# list re-seeds itself from internal/seed/vendors.json. That is fine for a
-# demo. For anything longer-lived, switch to plan: starter and uncomment the
-# disk block below.
+# The UI is prebuilt and committed to web/dist (see README), so Render's build
+# is just `go build` - no Docker image, no Node toolchain, no npm install.
+# That's the whole point: Docker builds re-ran the full npm+go multi-stage on
+# every deploy, which is slow on free-tier build machines. `go build` is not.
+#
+# Whenever ui/src changes, rebuild and commit web/dist before pushing:
+#   npm --prefix ui run build && git add web/dist && git commit
+#
+# On the free plan the filesystem is ephemeral and the instance sleeps when
+# idle (cold start ~30-50s on the next request - unrelated to build time, and
+# only goes away on a paid plan). Posted invoices are lost on restart while
+# the vendor list re-seeds itself from internal/seed/vendors.json. That is
+# fine for a demo. For anything longer-lived, switch to plan: starter and
+# uncomment the disk block below.
 services:
   - type: web
     name: rossum-erpx
-    runtime: docker
+    runtime: go
     plan: free
     region: frankfurt
-    dockerfilePath: ./Dockerfile
+    buildCommand: go build -o bin/erpx ./cmd/server
+    startCommand: ./bin/erpx
     healthCheckPath: /api/health
     autoDeployTrigger: commit
     envVars:

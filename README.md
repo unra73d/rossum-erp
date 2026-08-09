@@ -22,14 +22,16 @@ record.
 ## Run it
 
 ```bash
-# everything in one binary (UI is embedded)
-npm --prefix ui install && npm --prefix ui run build
+# everything in one binary (web/dist is already committed and embedded)
 go run ./cmd/server                      # http://localhost:8080
+
+# after changing ui/src, rebuild the embedded bundle
+npm --prefix ui install && npm --prefix ui run build
 
 # UI development with hot reload, API proxied to :8080
 npm --prefix ui run dev                  # http://localhost:5173
 
-# or the deployed image
+# or a local container build (not what Render uses - see Deployment)
 docker build -t erpx . && docker run -p 8080:8080 erpx
 ```
 
@@ -135,7 +137,24 @@ rule, and the HTTP surface.
 
 ## Deployment
 
-`render.yaml` deploys one Docker web service. On the free plan the filesystem is
-ephemeral, so posted invoices are lost on restart while the vendor list re-seeds itself
-from `internal/seed/vendors.json`. For anything longer-lived, switch to a paid plan and
-uncomment the disk block.
+`render.yaml` deploys one native Go web service — `go build -o bin/erpx ./cmd/server`,
+nothing else. That only works because `web/dist` (the built UI) is committed to the repo,
+so Render's build never touches Node. **After any change under `ui/src`, rebuild and
+commit the bundle before pushing:**
+
+```bash
+npm --prefix ui run build
+git add web/dist && git commit -m "Rebuild UI"
+```
+
+A stale `web/dist` is a silent trap - the server embeds whatever is on disk at compile
+time, so an unrebuilt bundle deploys the *previous* UI with no build error to catch it.
+
+A `Dockerfile` still exists for local container testing (`docker build -t erpx .`) but
+Render does not use it - that multi-stage npm+go build is what made deploys slow.
+
+On the free plan the filesystem is ephemeral and the instance sleeps when idle (first
+request after can take 30-50s - a Render free-plan property, unrelated to the build), so
+posted invoices are lost on restart while the vendor list re-seeds itself from
+`internal/seed/vendors.json`. For anything longer-lived, switch to a paid plan and
+uncomment the disk block in `render.yaml`.
