@@ -1,0 +1,23 @@
+# Render blueprint: one Docker web service, no database, no auth.
+#
+# On the free plan the container filesystem is ephemeral and the instance
+# sleeps when idle, so posted invoices are lost on restart while the vendor
+# list re-seeds itself from internal/seed/vendors.json. That is fine for a
+# demo. For anything longer-lived, switch to plan: starter and uncomment the
+# disk block below.
+services:
+  - type: web
+    name: rossum-erpx
+    runtime: docker
+    plan: free
+    region: frankfurt
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /api/health
+    autoDeployTrigger: commit
+    envVars:
+      - key: ERPX_DATA
+        value: /data/erpx.json
+    # disk:
+    #   name: erpx-data
+    #   mountPath: /data
+    #   sizeGB: 1

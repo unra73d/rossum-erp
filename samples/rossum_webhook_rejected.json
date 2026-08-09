@@ -1,0 +1,61 @@
+{
+  "_comment": "The same document with none of the Rossum fixes applied: punctuated VAT, a due date in the past, no vendor code, and a line item with no computed net total. ERPX refuses it with one error per problem - this is the 'before' half of the demo.",
+  "action": "changed",
+  "event": "annotation_status",
+  "annotation": {
+    "id": 3245787,
+    "url": "https://api.elis.rossum.ai/v1/annotations/3245787",
+    "queue": "https://api.elis.rossum.ai/v1/queues/8236",
+    "status": "exporting",
+    "content": [
+      {
+        "schema_id": "basic_info_section",
+        "category": "section",
+        "children": [
+          { "schema_id": "document_id", "category": "datapoint", "content": { "value": "202202" } },
+          { "schema_id": "date_issue", "category": "datapoint", "content": { "value": "12/1/2022", "normalized_value": "2022-01-12" } },
+          { "schema_id": "date_due", "category": "datapoint", "content": { "value": "2/3/2022", "normalized_value": "2022-03-02" } }
+        ]
+      },
+      {
+        "schema_id": "vendor_section",
+        "category": "section",
+        "children": [
+          { "schema_id": "sender_name", "category": "datapoint", "content": { "value": "Vendor a.s." } },
+          { "schema_id": "sender_vat_id", "category": "datapoint", "content": { "value": "CZ-34560613" } },
+          { "schema_id": "recipient_vat_id", "category": "datapoint", "content": { "value": "CZ/123 64 765" } }
+        ]
+      },
+      {
+        "schema_id": "amounts_section",
+        "category": "section",
+        "children": [
+          { "schema_id": "amount_total_base", "category": "datapoint", "content": { "value": "1 833 763,00", "normalized_value": "1833763" } },
+          { "schema_id": "currency", "category": "datapoint", "content": { "value": "czk" } }
+        ]
+      },
+      {
+        "schema_id": "line_items_section",
+        "category": "section",
+        "children": [
+          {
+            "schema_id": "line_items",
+            "category": "multivalue",
+            "children": [
+              {
+                "schema_id": "line_item",
+                "category": "tuple",
+                "children": [
+                  { "schema_id": "item_description", "category": "datapoint", "content": { "value": "product 1" } },
+                  { "schema_id": "item_quantity", "category": "datapoint", "content": { "value": "3" } },
+                  { "schema_id": "item_amount_base", "category": "datapoint", "content": { "value": "17 699,00", "normalized_value": "17699" } }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "document": { "file_name": "invoice_2.pdf", "mime_type": "application/pdf" }
+}

@@ -1,0 +1,122 @@
+/* Everything here is what Pico does not already give us: dense tables, a few
+   status colours, and a readable JSON block. */
+
+:root {
+  --pico-font-size: 95%;
+}
+
+main.container {
+  max-width: 1200px;
+}
+
+table {
+  font-size: 0.9rem;
+}
+
+td,
+th {
+  padding: 0.4rem 0.6rem;
+  vertical-align: top;
+}
+
+.muted {
+  color: var(--pico-muted-color);
+}
+
+.nowrap {
+  white-space: nowrap;
+}
+
+.right {
+  text-align: right;
+}
+
+.row {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.row.spread {
+  justify-content: space-between;
+}
+
+/* Pico stretches buttons to full width; inside a row they should size to
+   their label. */
+.row > button {
+  width: auto;
+  margin: 0;
+}
+
+.grow {
+  flex: 1;
+  margin: 0;
+}
+
+/* Pico spreads nav children with space-between; tabs read better grouped. */
+.tabs {
+  display: flex;
+  justify-content: flex-start;
+  gap: 0.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.tabs button {
+  width: auto;
+  margin: 0;
+}
+
+.badge {
+  display: inline-block;
+  padding: 0.1rem 0.5rem;
+  border-radius: 1rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+  background: var(--pico-secondary-background);
+  color: var(--pico-secondary-inverse);
+}
+
+.badge.ok {
+  background: #2e7d32;
+  color: #fff;
+}
+
+.badge.warn {
+  background: #ed6c02;
+  color: #fff;
+}
+
+.badge.err {
+  background: #c62828;
+  color: #fff;
+}
+
+pre.json {
+  max-height: 22rem;
+  overflow: auto;
+  font-size: 0.78rem;
+  background: var(--pico-code-background-color);
+  padding: 0.75rem;
+  border-radius: var(--pico-border-radius);
+}
+
+.empty {
+  padding: 2rem;
+  text-align: center;
+  color: var(--pico-muted-color);
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 0 1rem;
+}
+
+.actions button {
+  width: auto;
+  padding: 0.2rem 0.6rem;
+  font-size: 0.75rem;
+  margin: 0 0.25rem 0 0;
+}

@@ -1,0 +1,54 @@
+[
+  {
+    "code": "5300",
+    "name": "Ennel Holding",
+    "address": "Königstrasse 49",
+    "postal_code": "18069",
+    "city": "Allershagen",
+    "country": "DE",
+    "vat_number": "DE355869309",
+    "iban": "DE53500105174531417679",
+    "bank_account": "",
+    "tax_number_1": "28-045/9599",
+    "tax_number_2": "28-045/9513"
+  },
+  {
+    "code": "2385",
+    "name": "Browar Hergatz",
+    "address": "Eichendorffstr. 52",
+    "postal_code": "88143",
+    "city": "Hergatz",
+    "country": "Deutschland",
+    "vat_number": "DE379503850",
+    "iban": "DE74500105177772633598",
+    "bank_account": "74-50010517777263",
+    "tax_number_1": "22360849476",
+    "tax_number_2": "22360849489"
+  },
+  {
+    "code": "5843",
+    "name": "Browar Kraków",
+    "address": "Józefa Piłsudskiego 93",
+    "postal_code": "15230",
+    "city": "Kraków",
+    "country": "PL",
+    "vat_number": "PL839274940",
+    "iban": "N/A",
+    "bank_account": "8150 01051 7386 4987",
+    "tax_number_1": "WJ6645838035L",
+    "tax_number_2": "KN9463158956M"
+  },
+  {
+    "code": "9999",
+    "name": "Supplier s.r.o.",
+    "address": "123 Avenue",
+    "postal_code": "12000",
+    "city": "Prague",
+    "country": "Czech Republic",
+    "vat_number": "CZ34560613",
+    "iban": "KOMBCZPPXXX",
+    "bank_account": "43-3242342345/0100",
+    "tax_number_1": "34560613",
+    "tax_number_2": ""
+  }
+]

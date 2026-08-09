@@ -1,0 +1,94 @@
+{
+  "action": "changed",
+  "event": "annotation_status",
+  "annotation": {
+    "id": 3245786,
+    "url": "https://api.elis.rossum.ai/v1/annotations/3245786",
+    "queue": "https://api.elis.rossum.ai/v1/queues/8236",
+    "status": "exporting",
+    "content": [
+      {
+        "schema_id": "basic_info_section",
+        "category": "section",
+        "children": [
+          { "schema_id": "document_id", "category": "datapoint", "content": { "value": "202201" } },
+          { "schema_id": "date_issue", "category": "datapoint", "content": { "value": "31/12/2021", "normalized_value": "2021-12-31" } },
+          { "schema_id": "date_due", "category": "datapoint", "content": { "value": "2/3/2027", "normalized_value": "2027-03-02" } },
+          { "schema_id": "vendor_code", "category": "datapoint", "content": { "value": "9999" } }
+        ]
+      },
+      {
+        "schema_id": "vendor_section",
+        "category": "section",
+        "children": [
+          { "schema_id": "sender_name", "category": "datapoint", "content": { "value": "Supplier s.r.o." } },
+          { "schema_id": "sender_vat_id", "category": "datapoint", "content": { "value": "CZ34560613" } },
+          { "schema_id": "sender_address", "category": "datapoint", "content": { "value": "123 Avenue, 120 00 Prague 2, Czech Republic" } },
+          { "schema_id": "account_num", "category": "datapoint", "content": { "value": "43-3242342345/0100" } },
+          { "schema_id": "bic", "category": "datapoint", "content": { "value": "KOMBCZPPXXX" } },
+          { "schema_id": "recipient_name", "category": "datapoint", "content": { "value": "Customer, s.r.o." } },
+          { "schema_id": "recipient_vat_id", "category": "datapoint", "content": { "value": "CZ12364765" } }
+        ]
+      },
+      {
+        "schema_id": "amounts_section",
+        "category": "section",
+        "children": [
+          { "schema_id": "amount_total_base", "category": "datapoint", "content": { "value": "897 000,00", "normalized_value": "897000" } },
+          { "schema_id": "amount_total_tax", "category": "datapoint", "content": { "value": "188 370,00", "normalized_value": "188370" } },
+          { "schema_id": "amount_total", "category": "datapoint", "content": { "value": "1 085 370,00", "normalized_value": "1085370" } },
+          { "schema_id": "currency", "category": "datapoint", "content": { "value": "czk" } }
+        ]
+      },
+      {
+        "schema_id": "line_items_section",
+        "category": "section",
+        "children": [
+          {
+            "schema_id": "line_items",
+            "category": "multivalue",
+            "children": [
+              {
+                "schema_id": "line_item",
+                "category": "tuple",
+                "children": [
+                  { "schema_id": "item_code", "category": "datapoint", "content": { "value": "id1" } },
+                  { "schema_id": "item_description", "category": "datapoint", "content": { "value": "product 1" } },
+                  { "schema_id": "item_quantity", "category": "datapoint", "content": { "value": "1" } },
+                  { "schema_id": "item_amount_base", "category": "datapoint", "content": { "value": "120 000,00", "normalized_value": "120000" } },
+                  { "schema_id": "item_rate", "category": "datapoint", "content": { "value": "21" } },
+                  { "schema_id": "item_amount_total_base", "category": "datapoint", "content": { "value": "120000" } }
+                ]
+              },
+              {
+                "schema_id": "line_item",
+                "category": "tuple",
+                "children": [
+                  { "schema_id": "item_code", "category": "datapoint", "content": { "value": "id2" } },
+                  { "schema_id": "item_description", "category": "datapoint", "content": { "value": "product 2" } },
+                  { "schema_id": "item_quantity", "category": "datapoint", "content": { "value": "2" } },
+                  { "schema_id": "item_amount_base", "category": "datapoint", "content": { "value": "63 500,00", "normalized_value": "63500" } },
+                  { "schema_id": "item_rate", "category": "datapoint", "content": { "value": "21" } },
+                  { "schema_id": "item_amount_total_base", "category": "datapoint", "content": { "value": "127000" } }
+                ]
+              },
+              {
+                "schema_id": "line_item",
+                "category": "tuple",
+                "children": [
+                  { "schema_id": "item_code", "category": "datapoint", "content": { "value": "id3" } },
+                  { "schema_id": "item_description", "category": "datapoint", "content": { "value": "product 3" } },
+                  { "schema_id": "item_quantity", "category": "datapoint", "content": { "value": "1" } },
+                  { "schema_id": "item_amount_base", "category": "datapoint", "content": { "value": "650 000,00", "normalized_value": "650000" } },
+                  { "schema_id": "item_rate", "category": "datapoint", "content": { "value": "21" } },
+                  { "schema_id": "item_amount_total_base", "category": "datapoint", "content": { "value": "650000" } }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "document": { "file_name": "invoice_1.pdf", "mime_type": "application/pdf" }
+}
