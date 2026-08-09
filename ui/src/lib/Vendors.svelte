@@ -1,8 +1,7 @@
 <script>
   import { api, formatTime } from './api.js'
 
-  // In production this list is replicated from the real ERP; here it is
-  // editable so a demo can add or break a vendor and watch Rossum react.
+  // Vendor master data, maintained directly here.
   const blank = {
     code: '', name: '', address: '', postal_code: '', city: '', country: '',
     vat_number: '', iban: '', bank_account: '', tax_number_1: '', tax_number_2: '',

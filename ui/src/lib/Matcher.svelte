@@ -39,7 +39,7 @@
 <p class="muted">
   Vendor lookup: ERPX normalises the identifiers it is given (punctuation, spacing, accents,
   legal form) and answers which vendors they belong to. It does not score or rank, and it does
-  not decide whether a document may proceed — that stays in Rossum.
+  not decide whether a document may proceed — that decision is made upstream.
 </p>
 
 <form onsubmit={run}>

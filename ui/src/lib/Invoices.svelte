@@ -34,7 +34,7 @@
 
 <div class="row spread">
   <p class="grow muted">
-    Documents posted by Rossum to <code>POST /api/invoices</code>.
+    Invoices received via <code>POST /api/invoices</code>.
   </p>
   <button class="secondary" onclick={load}>Refresh</button>
 </div>
@@ -45,8 +45,7 @@
   <p aria-busy="true">Loading invoices…</p>
 {:else if invoices.length === 0}
   <p class="empty">
-    Nothing posted yet. Point a Rossum export hook at <code>/api/invoices</code>, or run the
-    curl example from the README.
+    Nothing posted yet. Send an invoice to <code>POST /api/invoices</code> to get started.
   </p>
 {:else}
   <figure>
@@ -135,7 +134,7 @@
           </tbody>
         </table>
         <p class="muted">
-          <small>Net total is the column computed in Rossum as quantity × unit price.</small>
+          <small>Net total is quantity × unit price.</small>
         </p>
       {/if}
 

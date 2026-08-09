@@ -264,7 +264,7 @@ func (s *Server) postInvoice(w http.ResponseWriter, r *http.Request) {
 
 	var inv model.Invoice
 	if rossum.Looks(body) {
-		event.Format = "rossum"
+		event.Format = "structured"
 		parsed, err := rossum.Parse(body)
 		if err != nil {
 			finish(http.StatusBadRequest, []string{"payload_invalid"}, "")

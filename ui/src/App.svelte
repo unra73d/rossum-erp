@@ -24,7 +24,7 @@
 <main class="container">
   <hgroup>
     <h1>ERPX</h1>
-    <p>Mock ERP for the Rossum integration — invoice intake, vendor master data, webhook log.</p>
+    <p>Vendor master data, invoice intake, and integration activity log.</p>
   </hgroup>
 
   <nav class="tabs">

@@ -212,7 +212,7 @@ func TestPostInvoiceRossumPayload(t *testing.T) {
 
 	_, events := do(t, h, "GET", "/api/events", "")
 	logged := events["results"].([]any)[0].(map[string]any)
-	if logged["format"] != "rossum" {
+	if logged["format"] != "structured" {
 		t.Errorf("event format = %v, want rossum", logged["format"])
 	}
 }
