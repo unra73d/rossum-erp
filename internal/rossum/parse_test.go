@@ -100,6 +100,67 @@ func TestParseWebhook(t *testing.T) {
 	}
 }
 
+// realSchemaFieldNames uses the exact schema_ids a live Rossum tenant sent
+// (item_total_base, amount_due), not the guessed names used in webhookBody
+// above. A hand-written test fixture that reuses the same wrong guess as the
+// parser it's testing proves nothing - that's exactly how item_total_base
+// went unmapped: webhookBody used "item_amount_total_base" throughout, the
+// parser recognised it, the test passed, and the mismatch only surfaced
+// against a real export, which rejected every line with
+// line_net_total_missing. This fixture exists so that class of bug fails
+// here instead of live.
+const realSchemaFieldNames = `{
+  "action": "export", "event": "annotation_content",
+  "annotation": {"id": 53567078, "content": [
+    {"schema_id": "basic_info_section", "category": "section", "children": [
+      {"schema_id": "document_id", "category": "datapoint", "content": {"value": "202201"}},
+      {"schema_id": "date_issue", "category": "datapoint", "content": {"value": "10/31/2021", "normalized_value": "2021-10-31"}},
+      {"schema_id": "date_due", "category": "datapoint", "content": {"value": "12/31/2026", "normalized_value": "2026-12-31"}}
+    ]},
+    {"schema_id": "totals_section", "category": "section", "children": [
+      {"schema_id": "amount_total_base", "category": "datapoint", "content": {"value": "897,000.0", "normalized_value": "897000.0"}},
+      {"schema_id": "amount_due", "category": "datapoint", "content": {"value": "1,085,370.0", "normalized_value": "1085370.0"}},
+      {"schema_id": "currency", "category": "datapoint", "content": {"value": "czk"}}
+    ]},
+    {"schema_id": "vendor_section", "category": "section", "children": [
+      {"schema_id": "sender_name", "category": "datapoint", "content": {"value": "Supplier s.r.o."}},
+      {"schema_id": "sender_vat_id", "category": "datapoint", "content": {"value": "CZ34560613"}},
+      {"schema_id": "vendor_code", "category": "datapoint", "content": {"value": "9999"}}
+    ]},
+    {"schema_id": "line_items_section", "category": "section", "children": [
+      {"schema_id": "line_items", "category": "multivalue", "children": [
+        {"schema_id": "line_item", "category": "tuple", "children": [
+          {"schema_id": "item_description", "category": "datapoint", "content": {"value": "product 1"}},
+          {"schema_id": "item_quantity", "category": "datapoint", "content": {"value": "1", "normalized_value": "1"}},
+          {"schema_id": "item_amount_base", "category": "datapoint", "content": {"value": "120,000.00", "normalized_value": "120000.00"}},
+          {"schema_id": "item_rate", "category": "datapoint", "content": {"value": "21", "normalized_value": "21"}},
+          {"schema_id": "item_total_base", "category": "datapoint", "content": {"value": "120,000.0", "normalized_value": "120000.0"}},
+          {"schema_id": "item_amount_total", "category": "datapoint", "content": {"value": "145,200.0", "normalized_value": "145200.0"}}
+        ]}
+      ]}
+    ]}
+  ]}
+}`
+
+func TestParseRealSchemaFieldNames(t *testing.T) {
+	inv, err := Parse([]byte(realSchemaFieldNames))
+	if err != nil {
+		t.Fatalf("Parse: %v", err)
+	}
+	if inv.GrossTotal != 1085370 {
+		t.Errorf("GrossTotal (from amount_due) = %v, want 1085370", inv.GrossTotal)
+	}
+	if len(inv.LineItems) != 1 {
+		t.Fatalf("got %d line items, want 1", len(inv.LineItems))
+	}
+	if got := inv.LineItems[0].AmountTotalBase; got != 120000 {
+		t.Errorf("AmountTotalBase (from item_total_base) = %v, want 120000 - this is the field ERPX requires and rejects the line without", got)
+	}
+	if got := inv.LineItems[0].AmountTotal; got != 145200 {
+		t.Errorf("AmountTotal (from item_amount_total) = %v, want 145200", got)
+	}
+}
+
 func TestParseFlatIsNotRossum(t *testing.T) {
 	if Looks([]byte(`{"number":"202201","vendor_code":"9999"}`)) {
 		t.Error("a flat ERPX invoice was mistaken for a Rossum payload")
