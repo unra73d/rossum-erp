@@ -27,7 +27,7 @@
           { "schema_id": "account_num", "category": "datapoint", "content": { "value": "43-3242342345/0100" } },
           { "schema_id": "bic", "category": "datapoint", "content": { "value": "KOMBCZPPXXX" } },
           { "schema_id": "recipient_name", "category": "datapoint", "content": { "value": "Customer, s.r.o." } },
-          { "schema_id": "recipient_vat_id", "category": "datapoint", "content": { "value": "CZ12364765" } }
+          { "schema_id": "recipient_vat_id_sanitized", "category": "datapoint", "content": { "value": "CZ12364765" } }
         ]
       },
       {

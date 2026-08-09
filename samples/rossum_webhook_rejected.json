@@ -23,7 +23,7 @@
         "children": [
           { "schema_id": "sender_name", "category": "datapoint", "content": { "value": "Vendor a.s." } },
           { "schema_id": "sender_vat_id_sanitized", "category": "datapoint", "content": { "value": "CZ-34560613" } },
-          { "schema_id": "recipient_vat_id", "category": "datapoint", "content": { "value": "CZ/123 64 765" } }
+          { "schema_id": "recipient_vat_id_sanitized", "category": "datapoint", "content": { "value": "CZ/123 64 765" } }
         ]
       },
       {
